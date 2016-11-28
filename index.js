@@ -43,9 +43,9 @@ const InvestigatoryPowers = {
 
     let followerIds = data.ids;
 
-    // Add @theresa_may and @Snowden to start of follower id array
+    // Add @theresa_may, @Number10gov, @Snowden to start of follower id array
     //
-    followerIds.unshift('747807250819981312', '2916305152');
+    followerIds.unshift('747807250819981312', '14224719', '2916305152');
 
     // Open stream and watch for follower updates and tracked hashtags
     //
@@ -56,23 +56,27 @@ const InvestigatoryPowers = {
 
     stream.on('tweet', function(tweet) {
 
-      // May has lied again, exclude retweets
+      // May has lied again, exclude quotes + retweets
       //
-      if (tweet.user.id_str === '747807250819981312' && !tweet.hasOwnProperty('retweeted_status')) {
+      if (tweet.user.id_str === '747807250819981312' || tweet.user.id_str === '14224719') {
 
-        console.log('!!!!!!!! \n');
-        console.log('> IPB FOUND: @theresa_may');
-        console.log('> > created_at: ' + tweet.created_at);
-        console.log('> > screen_name: @' + tweet.user.screen_name);
-        console.log('> > text: ' + tweet.text + '\n');
+        if (!twitter.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
 
-        InvestigatoryPowers.replyWithFreedom(tweet);
+          console.log('!!!!!!!! \n');
+          console.log('> IPB FOUND: @theresa_may or @Number10gov');
+          console.log('> > created_at: ' + tweet.created_at);
+          console.log('> > screen_name: @' + tweet.user.screen_name);
+          console.log('> > text: ' + tweet.text + '\n');
+
+          InvestigatoryPowers.replyWithFreedom(tweet);
+
+        }
 
       }
 
-      // The hero has posted, exclude retweets
+      // The hero has posted, exclude quotes + retweets
       //
-      if (tweet.user.id_str === '2916305152' && !tweet.hasOwnProperty('retweeted_status')) {
+      if (tweet.user.id_str === '2916305152' && !twitter.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
 
         console.log('******** \n');
         console.log('> IPB FOUND: @Snowden');
@@ -84,9 +88,9 @@ const InvestigatoryPowers = {
 
       }
 
-      // Follower tweets a link, exclude retweets
+      // Follower tweets a link, exclude quotes + retweets
       //
-      if (followerIds.includes(tweet.user.id_str) && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
+      if (followerIds.includes(tweet.user.id_str) && !twitter.is_quote_status && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
 
         if (tweet.entities.urls[0].hasOwnProperty('display_url')) {
 
@@ -102,9 +106,9 @@ const InvestigatoryPowers = {
 
       }
 
-      // Search for tweets containing tracked hashtags and retweet, exclude theresa_may & Snowden
+      // Search for tweets containing tracked hashtags and retweet, exclude @theresa_may, @Number10gov, @Snowden
       //
-      if (tweet.user.id_str !== '747807250819981312' && tweet.user.id_str !== '2916305152' && Object.keys(tweet.entities.hashtags).length !== 0) {
+      if (tweet.user.id_str !== '747807250819981312' && tweet.user.id_str === '14224719' && tweet.user.id_str !== '2916305152' && Object.keys(tweet.entities.hashtags).length !== 0) {
 
         let hashtags = tweet.entities.hashtags;
 
@@ -126,7 +130,7 @@ const InvestigatoryPowers = {
 
     // Get random 1984 quote
     //
-    let dontTreadOnMe = '@_dcdb ' + quotes.response[Math.floor(Math.random() * quotes.response.length)];
+    let dontTreadOnMe = '@' + tweet.user.screen_name + ' ' + quotes.response[Math.floor(Math.random() * quotes.response.length)];
 
     InvestigatoryPowers.bot.post('statuses/update', { in_reply_to_status_id: tweet.id_str, status: dontTreadOnMe }, function(err, data, response) {
 
@@ -179,7 +183,7 @@ const InvestigatoryPowers = {
 
     if (!shouldRateLimit && config.postToAccount) {
 
-      let message = 'Attention '+ config.replyToHandle +' the user @' + tweet.user.screen_name + ' has recently visited ' + tweet.entities.urls.display_url + '. Please update public records';
+      let message = 'Attention @'+ config.replyToHandle +' the user @' + tweet.user.screen_name + ' has recently visited ' + tweet.entities.urls.display_url + '. Please update public records';
 
       InvestigatoryPowers.bot.post('statuses/update', { status: message }, function(err, data, response) {
 
