@@ -60,7 +60,7 @@ const InvestigatoryPowers = {
       //
       if (tweet.user.id_str === '747807250819981312' || tweet.user.id_str === '14224719') {
 
-        if (!twitter.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
+        if (!tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
 
           console.log('!!!!!!!! \n');
           console.log('> IPB FOUND: @theresa_may or @Number10gov');
@@ -76,7 +76,7 @@ const InvestigatoryPowers = {
 
       // The hero has posted, exclude quotes + retweets
       //
-      if (tweet.user.id_str === '2916305152' && !twitter.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
+      if (tweet.user.id_str === '2916305152' && !tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
 
         console.log('******** \n');
         console.log('> IPB FOUND: @Snowden');
@@ -90,7 +90,7 @@ const InvestigatoryPowers = {
 
       // Follower tweets a link, exclude quotes + retweets
       //
-      if (followerIds.includes(tweet.user.id_str) && !twitter.is_quote_status && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
+      if (followerIds.includes(tweet.user.id_str) && !tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
 
         if (tweet.entities.urls[0].hasOwnProperty('display_url')) {
 
