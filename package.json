@@ -1,0 +1,14 @@
+{
+  "name": "pry_minister",
+  "version": "0.0.1",
+  "description": "Voluntarily submit your browsing history to Theresa May",
+  "main": "./index.js",
+  "dependencies": {
+    "dotenv": "^2.0.0",
+    "twit": "^2.2.5"
+  },
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "license": "MIT"
+}

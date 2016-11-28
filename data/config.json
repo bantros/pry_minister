@@ -1,0 +1,8 @@
+{
+  "screenName": "pry_minister",
+  "replyToHandle": "theresa_may",
+  "trackHashTags": "#IPBill, #SnoopersCharter",
+  "rateLimitTweet": 14400000,
+  "rateLimitRetweet": 21600000,
+  "postToAccount": true
+}
