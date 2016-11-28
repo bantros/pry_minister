@@ -28,10 +28,9 @@ const InvestigatoryPowers = {
     //
     InvestigatoryPowers.bot.get('followers/ids', { screen_name: config.screenName, stringify_ids: true },  function(err, data, response) {
 
-      console.log('\n');
       console.log('-------- \n');
-      console.log('> IPB TRACKING: ' + data.ids.length);
-      console.log('> IPB OPEN: stream \n');
+      console.log('> ipb tracking: ' + data.ids.length);
+      console.log('> ipb open: Stream \n');
 
       InvestigatoryPowers.streamFilter(data);
 
@@ -63,7 +62,7 @@ const InvestigatoryPowers = {
         if (!tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
 
           console.log('!!!!!!!! \n');
-          console.log('> IPB FOUND: @theresa_may or @Number10gov');
+          console.log('> ipb filter: @theresa_may or @number10gov');
           console.log('> > created_at: ' + tweet.created_at);
           console.log('> > screen_name: @' + tweet.user.screen_name);
           console.log('> > text: ' + tweet.text + '\n');
@@ -74,12 +73,12 @@ const InvestigatoryPowers = {
 
       }
 
-      // The hero has posted, exclude quotes + retweets
+      // Snowden the hero has posted, exclude retweets
       //
-      if (tweet.user.id_str === '2916305152' && !tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
+      if (tweet.user.id_str === '2916305152' && !tweet.hasOwnProperty('retweeted_status')) {
 
         console.log('******** \n');
-        console.log('> IPB FOUND: @Snowden');
+        console.log('> ipb filter: @snowden');
         console.log('> > created_at: ' + tweet.created_at);
         console.log('> > screen_name: @' + tweet.user.screen_name);
         console.log('> > text: ' + tweet.text + '\n');
@@ -95,7 +94,7 @@ const InvestigatoryPowers = {
         if (tweet.entities.urls[0].hasOwnProperty('display_url')) {
 
           console.log('-------- \n');
-          console.log('> IPB FILTER: follow');
+          console.log('> ipb filter: follow');
           console.log('> > created_at: ' + tweet.created_at);
           console.log('> > screen_name: @' + tweet.user.screen_name);
           console.log('> > display_url: ' + tweet.entities.urls[0].display_url + '\n');
@@ -137,14 +136,14 @@ const InvestigatoryPowers = {
       if (!err) {
 
         console.log('-------- \n');
-    		console.log('> IPB SUCCESS: reply');
+    		console.log('> ipb success: reply');
         console.log('> > id_str: ' + tweet.id_str);
         console.log('> > > ' + dontTreadOnMe + '\n');
 
     	} else {
 
         console.log('-------- \n');
-    		console.log('> IPB ERROR: reply');
+    		console.log('> ipb error: reply');
         console.log('> > id_str: ' + tweet.id_str + '\n');
         console.log('> > > ' + dontTreadOnMe + '\n');
 
@@ -161,13 +160,13 @@ const InvestigatoryPowers = {
     	if (!err) {
 
         console.log('-------- \n');
-    		console.log('> IPB SUCCESS: like');
+    		console.log('> ipb success: like');
         console.log('> > id_str: ' + tweet.id_str + '\n');
 
     	} else {
 
         console.log('-------- \n');
-    		console.log('> IPB ERROR: like');
+    		console.log('> ipb error: like');
         console.log('> > id_str: ' + tweet.id_str + '\n');
 
       }
@@ -183,18 +182,18 @@ const InvestigatoryPowers = {
 
     if (!shouldRateLimit && config.postToAccount) {
 
-      let message = 'Attention @'+ config.replyToHandle +' the user @' + tweet.user.screen_name + ' has recently visited ' + tweet.entities.urls.display_url + '. Please update public records';
+      let message = 'Attention @' + config.replyToHandle + ' the user @' + tweet.user.screen_name + ' has recently visited ' + tweet.entities.urls.display_url + '. Please update public records';
 
-      InvestigatoryPowers.bot.post('statuses/update', { status: message }, function(err, data, response) {
+      InvestigatoryPowers.bot.post('statuses/update', { in_reply_to_status_id: tweet.id_str, status: message }, function(err, data, response) {
 
         if (!err) {
 
           console.log('-------- \n');
-      		console.log('> IPB SUCCESS: submit');
+      		console.log('> ipb success: submit');
           console.log('> > id_str: ' + tweet.id_str + '\n');
 
           console.log('-------- \n');
-          console.log('> IPB ITEMS SKIPPED: ' + InvestigatoryPowers.skippedItems + '\n');
+          console.log('> ipb items skipped since last rt: ' + InvestigatoryPowers.skippedItems + '\n');
 
           InvestigatoryPowers.skippedItems = 0;
           InvestigatoryPowers.timeLastTweet = timeNow;
@@ -202,7 +201,7 @@ const InvestigatoryPowers = {
       	} else {
 
           console.log('-------- \n');
-      		console.log('> IPB ERROR: submit');
+      		console.log('> ipb error: submit');
           console.log('> > id_str: ' + tweet.id_str + '\n');
 
         }
@@ -225,13 +224,13 @@ const InvestigatoryPowers = {
         if (!err) {
 
           console.log('-------- \n');
-          console.log('> IPB SUCCESS: retweet');
+          console.log('> ipb success: rt');
           console.log('> > created_at: ' + tweet.created_at);
           console.log('> > screen_name: ' + tweet.user.screen_name);
           console.log('> > text: ' + tweet.text + '\n');
 
           console.log('-------- \n');
-          console.log('> IPB ITEMS SKIPPED: ' + InvestigatoryPowers.skippedItems + '\n');
+          console.log('> ipb items skipped since last rt: ' + InvestigatoryPowers.skippedItems + '\n');
 
           InvestigatoryPowers.skippedItems = 0;
           InvestigatoryPowers.timeLastRetweet = timeNow;
@@ -239,7 +238,7 @@ const InvestigatoryPowers = {
 				} else {
 
           console.log('-------- \n');
-					console.log('> IPB ERROR: retweet');
+					console.log('> ipb error: rt');
           console.log('> > created_at: ' + tweet.created_at);
           console.log('> > screen_name: ' + tweet.user.screen_name);
           console.log('> > text: ' + tweet.text + '\n');
@@ -253,6 +252,10 @@ const InvestigatoryPowers = {
   },
 
   render() {
+
+    console.log('\n');
+    console.log('-------- \n');
+    console.log('> ipb start: app \n');
 
     InvestigatoryPowers.getFollowerIds();
 
