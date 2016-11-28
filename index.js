@@ -108,7 +108,7 @@ const InvestigatoryPowers = {
 
       // Search for tweets containing tracked hashtags and retweet, exclude @theresa_may, @Number10gov, @Snowden
       //
-      if (tweet.user.id_str !== '747807250819981312' && tweet.user.id_str === '14224719' && tweet.user.id_str !== '2916305152' && Object.keys(tweet.entities.hashtags).length !== 0) {
+      if (tweet.user.id_str !== '747807250819981312' && tweet.user.id_str !== '14224719' && tweet.user.id_str !== '2916305152' && Object.keys(tweet.entities.hashtags).length !== 0) {
 
         let hashtags = tweet.entities.hashtags;
 
