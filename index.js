@@ -40,7 +40,7 @@ const InvestigatoryPowers = {
 
   streamFilter(data) {
 
-    let followerIds = data.ids;
+    let dataIds = data.ids, followerIds = data.ids;
 
     // Add @theresa_may, @Number10gov, @Snowden to start of follower id array
     //
@@ -89,7 +89,7 @@ const InvestigatoryPowers = {
 
       // Follower tweets a link, exclude quotes + retweets
       //
-      if (followerIds.includes(tweet.user.id_str) && !tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
+      if (dataIds.includes(tweet.user.id_str) && !tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
 
         if (tweet.entities.urls[0].hasOwnProperty('display_url')) {
 
@@ -145,7 +145,7 @@ const InvestigatoryPowers = {
         console.log('-------- \n');
     		console.log('> ipb error: reply');
         console.log('> > id_str: ' + tweet.id_str + '\n');
-        console.log('> > > ' + dontTreadOnMe + '\n');
+        console.log('> > > status: ' + dontTreadOnMe + '\n');
 
       }
 
@@ -182,7 +182,7 @@ const InvestigatoryPowers = {
 
     if (!shouldRateLimit && config.postToAccount) {
 
-      let message = 'Attention @' + config.replyToHandle + ' the user @' + tweet.user.screen_name + ' has recently visited ' + tweet.entities.urls.display_url + '. Please update public records';
+      let message = 'Attention @' + config.replyToHandle + ' the user @' + tweet.user.screen_name + ' has recently visited ' + tweet.entities.urls[0].display_url + '. Please update public records';
 
       InvestigatoryPowers.bot.post('statuses/update', { in_reply_to_status_id: tweet.id_str, status: message }, function(err, data, response) {
 
@@ -190,7 +190,8 @@ const InvestigatoryPowers = {
 
           console.log('-------- \n');
       		console.log('> ipb success: submit');
-          console.log('> > id_str: ' + tweet.id_str + '\n');
+          console.log('> > id_str: ' + tweet.id_str);
+          console.log('> > > status: ' + message + '\n');
 
           console.log('-------- \n');
           console.log('> ipb items skipped since last rt: ' + InvestigatoryPowers.skippedItems + '\n');
@@ -203,6 +204,7 @@ const InvestigatoryPowers = {
           console.log('-------- \n');
       		console.log('> ipb error: submit');
           console.log('> > id_str: ' + tweet.id_str + '\n');
+          console.log('> > > status: ' + message + '\n');
 
         }
 
