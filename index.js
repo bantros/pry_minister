@@ -30,7 +30,7 @@ const InvestigatoryPowers = {
 
       console.log('-------- \n');
       console.log('> ipb tracking: ' + data.ids.length);
-      console.log('> ipb open: Stream \n');
+      console.log('> ipb open: stream \n');
 
       InvestigatoryPowers.streamFilter(data);
 
@@ -55,11 +55,11 @@ const InvestigatoryPowers = {
 
     stream.on('tweet', function(tweet) {
 
-      // May has lied again, exclude quotes + retweets
+      // May has lied again, exclude retweets
       //
       if (tweet.user.id_str === '747807250819981312' || tweet.user.id_str === '14224719') {
 
-        if (!tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status')) {
+        if (!tweet.hasOwnProperty('retweeted_status')) {
 
           console.log('!!!!!!!! \n');
           console.log('> ipb filter: @theresa_may or @number10gov');
