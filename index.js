@@ -2,7 +2,7 @@
 
 const Twit = require('twit');
 
-const dotenv = require('dotenv').config();
+// const dotenv = require('dotenv').config();
 const config = require('./data/config.json');
 const quotes = require('./data/quotes.json');
 
@@ -40,11 +40,10 @@ const InvestigatoryPowers = {
 
   streamFilter(data) {
 
-    let dataIds = data.ids;
-    let followerIds = data.ids;
-
-    // Add @theresa_may, @Number10gov, @Snowden to start of follower id array
+    // Add @theresa_may, @Number10gov, @Snowden to copy of data.ids array
     //
+    let followerIds = data.ids.slice().sort();
+
     followerIds.unshift('747807250819981312', '14224719', '2916305152');
 
     // Open stream and watch for follower updates and tracked hashtags
@@ -90,9 +89,9 @@ const InvestigatoryPowers = {
 
       // Follower tweets a link, exclude quotes + retweets
       //
-      if (dataIds.includes(tweet.user.id_str) && !tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
+      if (data.ids.includes(tweet.user.id_str) && !tweet.is_quote_status && !tweet.hasOwnProperty('retweeted_status') && Object.keys(tweet.entities.urls).length !== 0) {
 
-        if (tweet.entities.urls[0].hasOwnProperty('display_url')) {
+        if (tweet.entities.urls[0].hasOwnProperty('display_url') && !tweet.entities.urls[0].display_url.match(/twitter.com|t.co/)) {
 
           console.log('-------- \n');
           console.log('> ipb filter: follow');
