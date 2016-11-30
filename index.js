@@ -2,7 +2,7 @@
 
 const Twit = require('twit');
 
-// const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config();
 const config = require('./data/config.json');
 const quotes = require('./data/quotes.json');
 
@@ -40,7 +40,8 @@ const InvestigatoryPowers = {
 
   streamFilter(data) {
 
-    let dataIds = data.ids, followerIds = data.ids;
+    let dataIds = data.ids;
+    let followerIds = data.ids;
 
     // Add @theresa_may, @Number10gov, @Snowden to start of follower id array
     //
@@ -99,7 +100,7 @@ const InvestigatoryPowers = {
           console.log('> > screen_name: @' + tweet.user.screen_name);
           console.log('> > display_url: ' + tweet.entities.urls[0].display_url + '\n');
 
-          InvestigatoryPowers.submitEvidence(tweet);
+          // InvestigatoryPowers.submitEvidence(tweet);
 
         }
 
